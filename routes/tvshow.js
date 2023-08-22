@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
 
   if (genre || rating || premiere_year) {
     if (genre) {
-      filter.genre = genre;
+      filter.genre = { $in: genre.split(",") };
     }
     if (rating) {
       filter.rating = { $gt: rating };
@@ -18,7 +18,6 @@ router.get("/", async (req, res) => {
       filter.premiere_year = { $gt: premiere_year };
     }
   }
-
   res.send(await tvshow.find(filter));
 });
 
