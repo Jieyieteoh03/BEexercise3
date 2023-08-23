@@ -19,7 +19,7 @@ const movieSchema = new Schema({
     required: true,
   },
   rating: {
-    type: String,
+    type: Number,
     required: true,
   },
 });

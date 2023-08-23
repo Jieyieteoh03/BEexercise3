@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 //import model into router
-const movie = require("../models/movie");
+const Movie = require("../models/movie");
 
 // list all the movies
 // router.get("/", async (req, res) => {
@@ -43,7 +43,7 @@ router.get("/", async (req, res) => {
       filter.release_year = { $gt: release_year }; //{ $gt: release_year }
     }
   }
-  res.send(await movie.find(filter));
+  res.send(await Movie.find(filter));
 });
 
 //get specific movie by id
@@ -51,8 +51,44 @@ router.get("/", async (req, res) => {
   /movies/64e40e1bf0176bfb7721dafe
 */
 router.get("/:id", async (req, res) => {
-  const data = await movie.findOne({ _id: req.params.id });
+  const data = await Movie.findOne({ _id: req.params.id });
   res.send(data);
+});
+
+//create new movie route
+router.post("/", async (req, res) => {
+  //create a placeholder for a new movie (Havent done anything, just putting it there)
+  const newMovie = new Movie({
+    title: req.body.title,
+    director: req.body.director,
+    release_year: req.body.release_year,
+    genre: req.body.genre,
+    rating: req.body.rating,
+  });
+
+  //save the new movie into mongodb
+  await newMovie.save();
+  res.send(newMovie);
+});
+
+//update a movie
+router.put("/:id", async (req, res) => {
+  //get movie id
+  const movie_id = req.params.id;
+  //update the movie
+  const updatedMovie = await Movie.findByIdAndUpdate(movie_id, req.body, {
+    new: true, //return the latest modified data
+  });
+  res.send(updatedMovie);
+});
+
+//delete a movie
+router.delete("/:id", async (req, res) => {
+  //get movie id
+  const movie_id = req.params.id;
+  //delete the movie
+  const deleteMovie = await Movie.findByIdAndDelete(movie_id);
+  res.send(deleteMovie);
 });
 
 module.exports = router;
