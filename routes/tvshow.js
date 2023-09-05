@@ -60,7 +60,7 @@ router.put("/:id", async (req, res) => {
     const updatedTvshow = await Tvshow.findByIdAndUpdate(tvshow_id, req.body, {
       new: true,
     });
-    res.status.send(updatedTvshow);
+    res.status(200).send(updatedTvshow);
   } catch (error) {
     res.status(400).send({ message: error._message });
   }
